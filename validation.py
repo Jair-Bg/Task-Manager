@@ -8,16 +8,7 @@ Input validation utilities for the Task Management System.
 def validate_task_name(task_name):
     """
     Validate the task name provided by the user.
-
-    Rules:
-    - Must be a non-empty string after stripping whitespace.
-    - Must be at least 3 characters long.
-
-    Parameters:
-        task_name (str): The task name to validate.
-
-    Returns:
-        tuple: (is_valid: bool, message: str)
+    Returns (is_valid: bool, message: str).
     """
     if not isinstance(task_name, str):
         return False, "Task name must be a string."
@@ -36,17 +27,11 @@ def validate_task_name(task_name):
 def validate_task_id(task_id, tasks):
     """
     Validate that the given task ID exists in the task list.
-
-    Parameters:
-        task_id (int | str): The ID to look up (will be cast to int).
-        tasks (list):        The current list of task dictionaries.
-
-    Returns:
-        tuple: (is_valid: bool, message: str)
+    Returns (is_valid: bool, message: str).
     """
     try:
         task_id = int(task_id)
-    except (ValueError, TypeError):
+    except ValueError:
         return False, "Task ID must be a valid integer."
 
     if len(tasks) == 0:
