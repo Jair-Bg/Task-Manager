@@ -10,11 +10,6 @@ def validate_task_name(task_name):
     Validate the task name provided by the user.
     Returns (is_valid: bool, message: str).
     """
-    if not isinstance(task_name, str):
-        return False, "Task name must be a string."
-
-    task_name = task_name.strip()
-
     if len(task_name) == 0:
         return False, "Task name cannot be empty."
 
