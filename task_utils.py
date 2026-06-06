@@ -4,39 +4,44 @@ task_utils.py
 Core utility functions for the Task Management System.
 
 Tasks are stored as a list of dictionaries with the following keys:
-    - id       (int):  Unique identifier for the task.
-    - name     (str):  Name/description of the task.
-    - complete (bool): Whether the task has been completed.
+    - id          (int):  Unique identifier for the task.
+    - title       (str):  Title/name of the task.
+    - description (str):  Description of the task.
+    - due_date    (str):  Due date as a string (e.g. '2024-05-24').
+    - completed   (bool): Whether the task has been completed.
 """
 
 from validation import validate_task_name, validate_task_id
 
 
-def add_task(tasks, task_name):
+def add_task(tasks, title, description, due_date):
     """
     Add a new task to the task list.
 
     Parameters:
-        tasks     (list): The current list of task dictionaries.
-        task_name (str):  Name of the new task.
+        tasks       (list): The current list of task dictionaries.
+        title       (str):  Title of the new task.
+        description (str):  Description of the new task.
+        due_date    (str):  Due date of the new task.
 
     Returns:
-        str: A message indicating success or describing the validation error.
+        str: "Task added successfully!" on success, or a validation error message.
     """
-    is_valid, message = validate_task_name(task_name)
+    is_valid, message = validate_task_name(title)
     if not is_valid:
         return message
 
-    # Generate a unique ID (1-based, using max existing id + 1)
     new_id = max((task["id"] for task in tasks), default=0) + 1
 
     task = {
         "id": new_id,
-        "name": task_name.strip(),
-        "complete": False,
+        "title": title.strip(),
+        "description": description.strip(),
+        "due_date": due_date.strip(),
+        "completed": False,
     }
     tasks.append(task)
-    return "Task added successfully."
+    return "Task added successfully!"
 
 
 def complete_task(tasks, task_id):
@@ -48,7 +53,7 @@ def complete_task(tasks, task_id):
         task_id (int | str): The ID of the task to mark complete.
 
     Returns:
-        str: A message indicating success or describing the validation error.
+        str: "Task marked as complete!" on success, or a validation error message.
     """
     is_valid, message = validate_task_id(task_id, tasks)
     if not is_valid:
@@ -57,8 +62,8 @@ def complete_task(tasks, task_id):
     task_id = int(task_id)
     for task in tasks:
         if task["id"] == task_id:
-            task["complete"] = True
-            return "Task marked as complete."
+            task["completed"] = True
+            return "Task marked as complete!"
 
     return "Task not found."
 
@@ -71,27 +76,24 @@ def get_pending_tasks(tasks):
         tasks (list): The current list of task dictionaries.
 
     Returns:
-        list: A list of task dictionaries where complete == False.
+        list: A list of task dictionaries where completed == False.
     """
-    return [task for task in tasks if not task["complete"]]
+    return [task for task in tasks if not task["completed"]]
 
 
-def track_progress(tasks):
+def calculate_progress(tasks):
     """
-    Calculate and return a summary of overall task progress.
+    Calculate the percentage of completed tasks.
 
     Parameters:
         tasks (list): The current list of task dictionaries.
 
     Returns:
-        str: A formatted progress report, e.g.
-             "Progress: 2/5 tasks completed (40.00%)"
-             or "No working currently." when there are no tasks.
+        float: Percentage of completed tasks (e.g. 50.0), or 0.0 if no tasks.
     """
     total = len(tasks)
     if total == 0:
-        return "No working currently."
+        return 0.0
 
-    completed = sum(1 for task in tasks if task["complete"])
-    percentage = (completed / total) * 100
-    return f"Progress: {completed}/{total} tasks completed ({percentage:.2f}%)"
+    completed = sum(1 for task in tasks if task["completed"])
+    return (completed / total) * 100

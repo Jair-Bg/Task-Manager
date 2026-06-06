@@ -11,7 +11,7 @@ Provides a simple menu-driven interface that lets users:
     5. Exit
 """
 
-from task_utils import add_task, complete_task, get_pending_tasks, track_progress
+from task_utils import add_task, complete_task, get_pending_tasks, calculate_progress
 
 
 def display_menu():
@@ -34,37 +34,36 @@ def main():
         choice = input("Enter your choice (1-5): ").strip()
 
         if choice == "1":
-            # Add a task
-            task_name = input("Enter the task name: ")
-            message = add_task(tasks, task_name)
+            title = input("Enter task title: ")
+            description = input("Enter task description: ")
+            due_date = input("Enter due date (YYYY-MM-DD): ")
+            message = add_task(tasks, title, description, due_date)
             print(message)
 
         elif choice == "2":
-            # Mark a task as complete
             pending = get_pending_tasks(tasks)
             if not pending:
                 print("No pending tasks to complete.")
             else:
                 print("\nPending Tasks:")
                 for task in pending:
-                    print(f"  ID: {task['id']} | {task['name']}")
+                    print(f"  ID: {task['id']} | {task['title']} | Due: {task['due_date']}")
                 task_id = input("Enter the task ID to mark as complete: ")
                 message = complete_task(tasks, task_id)
                 print(message)
 
         elif choice == "3":
-            # View pending tasks
             pending = get_pending_tasks(tasks)
             if not pending:
                 print("No pending tasks.")
             else:
                 print("\nPending Tasks:")
                 for task in pending:
-                    print(f"  ID: {task['id']} | {task['name']}")
+                    print(f"  ID: {task['id']} | {task['title']} | Due: {task['due_date']}")
 
         elif choice == "4":
-            # Track progress
-            print(track_progress(tasks))
+            progress = calculate_progress(tasks)
+            print(f"Progress: {progress}%")
 
         elif choice == "5":
             print("Goodbye!")
