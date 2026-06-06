@@ -2,14 +2,13 @@
 main.py
 -------
 Entry point for the Task Management System.
-
-Provides a simple menu-driven interface that lets users:
-    1. Add a task
-    2. Mark a task as complete
-    3. View pending tasks
-    4. Track progress
-    5. Exit
 """
+
+import sys
+import os
+
+# Ensure the directory containing this file is on the path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from task_utils import add_task, complete_task, get_pending_tasks, calculate_progress
 

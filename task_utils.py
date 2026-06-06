@@ -2,14 +2,12 @@
 task_utils.py
 -------------
 Core utility functions for the Task Management System.
-
-Tasks are stored as a list of dictionaries with the following keys:
-    - id          (int):  Unique identifier for the task.
-    - title       (str):  Title/name of the task.
-    - description (str):  Description of the task.
-    - due_date    (str):  Due date as a string (e.g. '2024-05-24').
-    - completed   (bool): Whether the task has been completed.
 """
+
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from validation import validate_task_name, validate_task_id
 
@@ -17,12 +15,6 @@ from validation import validate_task_name, validate_task_id
 def add_task(tasks, title, description, due_date):
     """
     Add a new task to the task list.
-
-    Parameters:
-        tasks       (list): The current list of task dictionaries.
-        title       (str):  Title of the new task.
-        description (str):  Description of the new task.
-        due_date    (str):  Due date of the new task.
 
     Returns:
         str: "Task added successfully!" on success, or a validation error message.
@@ -48,10 +40,6 @@ def complete_task(tasks, task_id):
     """
     Mark a task as complete.
 
-    Parameters:
-        tasks   (list):      The current list of task dictionaries.
-        task_id (int | str): The ID of the task to mark complete.
-
     Returns:
         str: "Task marked as complete!" on success, or a validation error message.
     """
@@ -72,11 +60,8 @@ def get_pending_tasks(tasks):
     """
     Retrieve all tasks that have not yet been completed.
 
-    Parameters:
-        tasks (list): The current list of task dictionaries.
-
     Returns:
-        list: A list of task dictionaries where completed == False.
+        list: Tasks where completed == False.
     """
     return [task for task in tasks if not task["completed"]]
 
@@ -84,9 +69,6 @@ def get_pending_tasks(tasks):
 def calculate_progress(tasks):
     """
     Calculate the percentage of completed tasks.
-
-    Parameters:
-        tasks (list): The current list of task dictionaries.
 
     Returns:
         float: Percentage of completed tasks (e.g. 50.0), or 0.0 if no tasks.
