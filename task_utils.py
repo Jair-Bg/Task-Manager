@@ -48,3 +48,14 @@ def calculate_progress(tasks):
         return 0.0
     completed = sum(1 for task in tasks if task["completed"])
     return (completed / total) * 100
+
+
+def validate_input(task_id, tasks):
+    """Additional validation used internally."""
+    try:
+        task_id = int(task_id)
+    except ValueError:
+        return False, "Invalid task ID."
+    if len(tasks) == 0:
+        return False, "No tasks available."
+    return True, "Valid."

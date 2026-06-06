@@ -20,7 +20,7 @@ def validate_task_name(task_name):
 def validate_task_id(task_id, tasks):
     try:
         task_id = int(task_id)
-    except (ValueError, TypeError):
+    except ValueError:
         return False, "Task ID must be a valid integer."
     if len(tasks) == 0:
         return False, "No tasks available."
